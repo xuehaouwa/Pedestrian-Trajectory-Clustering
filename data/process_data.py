@@ -28,7 +28,9 @@ class DataLoader():
         return self.data_matrix
 
     def get_pedestrian_num(self):
-        pass
+        self.pedestrian_num = np.size(np.unique(self.data_matrix[:, 0]))
+
+        return self.pedestrian_num
 
     def get_trajectories(self):
         pass
@@ -48,6 +50,8 @@ DL = DataLoader('TownCentre-groundtruth.txt')
 data = DL.read_from_txt()
 print(data)
 print(np.shape(data))
+ped_num = DL.get_pedestrian_num()
+print(ped_num)
 # data = pd.read_csv('TownCentre-groundtruth.txt')
 # data.columns = ['id', 'frame', 'headVaild', 'bodyVaild', 'headLeft', 'headTop', 'headRight', 'headBottom', 'bodyLeft', 'bodyTop', 'bodyRight', 'bodyBottom']
 # a = data.as_matrix()
