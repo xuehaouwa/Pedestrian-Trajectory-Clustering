@@ -17,6 +17,7 @@ class DataLoader():
         self.raw_data = None
         self.data_matrix = None
         self.pedestrian_num = None
+        self.all_trajectories = []
 
     def read_from_txt(self):
         self.raw_data = pd.read_csv(self.data_path)
@@ -33,7 +34,19 @@ class DataLoader():
         return self.pedestrian_num
 
     def get_trajectories(self):
-        pass
+
+        for i in range(self.pedestrian_num):
+            temp_traj = []
+
+            for j in range(len(self.data_matrix)):
+
+                if self.data_matrix[j][0] == i:
+                    temp_traj.append(self.center_of_bounding_box(self.data_matrix[j][-4], self.data_matrix[j][-3],
+                                                                 self.data_matrix[j][-2], self.data_matrix[j][-1]))
+
+            self.all_trajectories.append(temp_traj)
+
+        return self.all_trajectories
 
     @staticmethod
     def center_of_bounding_box(left, top, right, bottom):
@@ -52,27 +65,9 @@ print(data)
 print(np.shape(data))
 ped_num = DL.get_pedestrian_num()
 print(ped_num)
-# data = pd.read_csv('TownCentre-groundtruth.txt')
-# data.columns = ['id', 'frame', 'headVaild', 'bodyVaild', 'headLeft', 'headTop', 'headRight', 'headBottom', 'bodyLeft', 'bodyTop', 'bodyRight', 'bodyBottom']
-# a = data.as_matrix()
 
+all_trajectories = DL.get_trajectories()
 
-#
-#
-#
-# def get_trajectories(data, person_num):
-#
-#     all_traj = []
-#     for j in range(person_num):
-#
-#         traj = []
-#         for i in range(len(data)):
-#
-#             if data[i][0] == j:
-#                 traj.append(center_of_bounding_box(data[i][-4], data[i][-3], data[i][-2], data[i][-1]))
-#         all_traj.append(traj)
-#
-#     return all_traj
-#
-#
-# data = get_trajectories(a, 231)
+print(all_trajectories)
+print(len(all_trajectories))
+
