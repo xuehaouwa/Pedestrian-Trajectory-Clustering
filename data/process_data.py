@@ -18,6 +18,7 @@ class DataLoader():
         self.data_matrix = None
         self.pedestrian_num = None
         self.all_trajectories = []
+        self.trajectories = []
 
     def read_from_txt(self):
         self.raw_data = pd.read_csv(self.data_path)
@@ -47,7 +48,15 @@ class DataLoader():
             self.all_trajectories.append(temp_traj)
 
         return self.all_trajectories
-
+    
+    def traj_filter(self, length_threshold):
+        
+        for i in range(len(self.all_trajectories)):
+            if len(self.all_trajectories[i]) >= length_threshold:
+                self.trajectories.append(self.all_trajectories[i])
+                
+        return self.trajectories
+    
     @staticmethod
     def center_of_bounding_box(left, top, right, bottom):
         center_x = (left + right) / 2
@@ -61,13 +70,18 @@ class DataLoader():
 DL = DataLoader('TownCentre-groundtruth.txt')
 
 data = DL.read_from_txt()
-print(data)
+#print(data)
 print(np.shape(data))
 ped_num = DL.get_pedestrian_num()
 print(ped_num)
 
 all_trajectories = DL.get_trajectories()
 
-print(all_trajectories)
+
+#print(all_trajectories)
 print(len(all_trajectories))
+
+traj = DL.traj_filter(40)
+
+
 
