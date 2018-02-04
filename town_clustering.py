@@ -7,6 +7,7 @@
 from clustering.clustering import Clustering
 from data.process_data import DataLoader
 import numpy as np
+from utils.drawing import DrawTrajectory
 
 
 def town_data():
@@ -30,3 +31,8 @@ cluster = Clustering()
 res = cluster.clusterSpectral(town_trajectories[0: 8], 2)
 
 print(res)
+
+drawer = DrawTrajectory('town_background.jpg')
+drawer.draw_clusterd_trajectories(town_trajectories[0: 8], res, 2)
+
+
