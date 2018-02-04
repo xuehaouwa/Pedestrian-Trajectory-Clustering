@@ -1,4 +1,4 @@
-# import numpy as np
+import numpy as np
 #
 # a = np.array([1, 2, 1, 1])
 #
@@ -23,7 +23,12 @@
 #
 # print(d)
 
-a = [1, 2]
+a = [1.1, 2.2]
+c = np.array(a)
 b = tuple(a)
 
 print(b)
+print(np.floor(a))
+
+
+print(int(a[0]))

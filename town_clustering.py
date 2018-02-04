@@ -8,7 +8,7 @@ from clustering.clustering import Clustering
 from data.process_data import DataLoader
 import numpy as np
 from utils.drawing import DrawTrajectory
-
+import time
 
 def town_data():
     DL = DataLoader('./data/TownCentre-groundtruth.txt')
@@ -28,11 +28,15 @@ town_trajectories = town_data()
 
 cluster = Clustering()
 
-res = cluster.clusterSpectral(town_trajectories[0: 8], 2)
+start_time = time.time()
+res = cluster.clusterSpectral(town_trajectories[0: 18], 2)
+
+
+print(time.time()-start_time)
 
 print(res)
 
-drawer = DrawTrajectory('town_background.jpg')
-drawer.draw_clusterd_trajectories(town_trajectories[0: 8], res, 2)
+drawer = DrawTrajectory('town_background.png')
+drawer.draw_clusterd_trajectories(town_trajectories[0: 18], res, 2)
 
 

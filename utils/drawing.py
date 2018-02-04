@@ -18,9 +18,13 @@ class DrawTrajectory():
         for cluster in range(self.cluster_num):
             for i in range(len(self.clustering_label)):
                 if self.clustering_label[i] == cluster:
-                    self.draw_clusterd_trajectories(self.background, self.trajectory_data[i], self.color[cluster])
+                    self.draw_single_trajectory(self.background, self.trajectory_data[i], self.color[cluster])
+
+        cv2.imwrite('clustered.jpg', self.background)
+        cv2.imshow('img', self.background)
+        cv2.waitKey(0)
 
     @staticmethod
     def draw_single_trajectory(img, trajectory, color):
-        for i in range(len(trajectory)):
-            cv2.line(img, tuple(trajectory[i]), tuple(trajectory[i + 1]), color=color, thickness=2, lineType=cv2.LINE_4)
+        for i in range(len(trajectory) - 1):
+            cv2.line(img, (int(trajectory[i][0]), int(trajectory[i][1])), (int(trajectory[i+1][0]), int(trajectory[i+1][1])), color=color, thickness=2, lineType=cv2.LINE_4)
