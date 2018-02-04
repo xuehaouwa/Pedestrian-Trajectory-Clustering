@@ -21,8 +21,8 @@ class DrawTrajectory():
                     self.draw_single_trajectory(self.background, self.trajectory_data[i], self.color[cluster])
 
         cv2.imwrite('clustered.jpg', self.background)
-        cv2.imshow('img', self.background)
-        cv2.waitKey(0)
+#        cv2.imshow('img', self.background)
+#        cv2.waitKey(0)
 
     @staticmethod
     def draw_single_trajectory(img, trajectory, color):

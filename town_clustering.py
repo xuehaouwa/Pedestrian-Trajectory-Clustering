@@ -29,7 +29,7 @@ town_trajectories = town_data()
 cluster = Clustering()
 
 start_time = time.time()
-res = cluster.clusterSpectral(town_trajectories[0: 18], 2)
+res = cluster.clusterSpectral(town_trajectories[0: 184], 6)
 
 
 print(time.time()-start_time)
@@ -37,6 +37,6 @@ print(time.time()-start_time)
 print(res)
 
 drawer = DrawTrajectory('town_background.png')
-drawer.draw_clusterd_trajectories(town_trajectories[0: 18], res, 2)
+drawer.draw_clusterd_trajectories(town_trajectories[0: 184], res, 6)
 
 

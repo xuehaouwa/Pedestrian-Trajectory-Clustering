@@ -12,7 +12,7 @@ from scipy.cluster.vq import kmeans2
 import random
 from scipy import spatial
 import operator
-
+import math
 
 class Clustering:
     """A class implementing trajectory clustering."""
