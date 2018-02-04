@@ -4,20 +4,22 @@ Created on 24. 4. 2015
 @author: janbednarik
 '''
 
-from trajectory import Trajectory
+from utils.trajectory import Trajectory
 import numpy as np
-import math
-from common import *
-from scipy.linalg import sqrtm
-#from scipy.io.matlab.mio5_utils import scipy
+# import math
+from utils.common import *
+# from scipy.linalg import sqrtm
+# from scipy.io.matlab.mio5_utils import scipy
 from scipy.cluster.vq import kmeans
 from scipy.cluster.vq import kmeans2
 import random
-from scipy.spatial.distance import euclidean
+# from scipy.spatial.distance import euclidean
 from scipy import spatial
+
 
 class Clustering:
     """A class implementing trajectory clustering."""
+
     def __init__(self, alpha=0.88, w=2.0, stdNN=2, stdMin=0.4, stdMax=20.0):
         """ Constructor
 
@@ -31,8 +33,8 @@ class Clustering:
         [1] Clustering of Vehicle Trajectories (Stefan Atev)
         """
         self.trajectories = []
-        self.distMat = np.zeros((0,0))
-        self.stdDevs = np.zeros((0,0))
+        self.distMat = np.zeros((0, 0))
+        self.stdDevs = np.zeros((0, 0))
         self.alpha = alpha
         self.w = w
         self.stdNN = stdNN
@@ -44,6 +46,16 @@ class Clustering:
 
     def modHausDist(self, t1idx, t2idx):
         """Computes modified Hausdorf distance."""
+
+        # t1 = Trajectory()
+        # t2 = Trajectory()
+        #
+        # for i in self.trajectories[t1idx]:
+        #     t1.addPoint(i)
+        #
+        # for j in self.trajectories[t2idx]:
+        #     t2.addPoint(j)
+
         t1 = self.trajectories[t1idx]
         t2 = self.trajectories[t2idx]
 
@@ -55,7 +67,8 @@ class Clustering:
             pt1 = t1.getPoints()[i]
 
             # Find corresponding point pt2 in t2 for point pt1 = t1[i]
-            pt2idx = np.argmin(np.array([abs(t1pointsRelPos[i] - t2pointsRelPos[j]) for j in range(len(t2pointsRelPos))]))
+            pt2idx = np.argmin(
+                np.array([abs(t1pointsRelPos[i] - t2pointsRelPos[j]) for j in range(len(t2pointsRelPos))]))
             pt2 = t2.getPoints()[pt2idx]
 
             # Get set of points sp2 of t2 within neighborhood of point pt2
@@ -75,7 +88,7 @@ class Clustering:
         # Find distance worse then self.alpha percent of the other distance
         distances = np.sort(distances)
 
-#         return distances[int(round((len(distances) - 1) * self.alpha))]
+        #         return distances[int(round((len(distances) - 1) * self.alpha))]
         return distances[min(int(len(distances) * self.alpha), len(distances) - 1)]
 
     def createDistanceMatrix(self):
@@ -86,11 +99,12 @@ class Clustering:
             for c in range(size):
                 dist = self.modHausDist(r, c)
                 self.distMat[r, c] *= dist
-#                 self.distMat[c, r] *= dist
+
+    #                 self.distMat[c, r] *= dist
 
     def createStdDevs(self):
         rowSortedDistMat = np.copy(self.distMat)
-        rowSortedDistMat.sort(axis = 1)
+        rowSortedDistMat.sort(axis=1)
 
         self.stdDevs = rowSortedDistMat[:, min(self.stdNN, rowSortedDistMat.shape[1] - 1)]
         for i in range(len(self.stdDevs)):
@@ -100,7 +114,8 @@ class Clustering:
         """A function computes the similarity measure of trajectories t1 and t2
         according to paper 'Clustering of Vehicle Trajectories (Stefan Atev)'
         """
-        return math.exp( -(self.distMat[t1idx, t2idx] * self.distMat[t2idx, t1idx]) / (2 * self.std(t1idx) * self.std(t2idx)) )
+        return math.exp(
+            -(self.distMat[t1idx, t2idx] * self.distMat[t2idx, t1idx]) / (2 * self.std(t1idx) * self.std(t2idx)))
 
     def similarityDummy(self, t1idx, t2idx):
         """DEBUG VERSION
@@ -113,7 +128,8 @@ class Clustering:
 
         dist = 0
         for i in range(tlen):
-            dist += math.sqrt((t1.getPoints()[i][0] - t2.getPoints()[i][0])**2 + (t1.getPoints()[i][1] - t2.getPoints()[i][1])**2)
+            dist += math.sqrt(
+                (t1.getPoints()[i][0] - t2.getPoints()[i][0]) ** 2 + (t1.getPoints()[i][1] - t2.getPoints()[i][1]) ** 2)
 
         return 1.0 / (dist / float(tlen) + 1e-6)
 
@@ -160,7 +176,6 @@ class Clustering:
             for j in clusters[i]:
                 self.trajectories[j].setClusterIdx(i)
 
-
     def clusterSpectral(self, trajectories, clusters=8):
         """
         input:
@@ -174,7 +189,7 @@ class Clustering:
         the function estimates the number of resulting clusters automatically.
         """
         # Need to be assigned as am object variable - other support functions use it (createStdDevs(), etc.)!
-        self.trajectories = trajectories       
+        self.trajectories = self.change_to_traj(trajectories)
 
         # Update a distance matrix and std deviations
         self.createDistanceMatrix()
@@ -219,7 +234,7 @@ class Clustering:
                 R = np.dot(S, V)
 
                 # k-means clustering of the row vectors of R
-                cb, wcScatt = kmeans(R, g, iter=20, thresh=1e-05) # cb = codebook (centroids = rows of cb)
+                cb, wcScatt = kmeans(R, g, iter=20, thresh=1e-05)  # cb = codebook (centroids = rows of cb)
 
                 # compute distortion score rho_g (withit class scatter /  sum(within class scatter, total scatter))
                 totScatt = np.sum([np.linalg.norm(r - c) for r in R for c in cb])
@@ -246,26 +261,42 @@ class Clustering:
             initCentroidsDist[:, i] = [spatial.distance.euclidean(obs, initCentroids[i]) for obs in R]
 
             # get the observation which has the worst minimal distance to some already existing centroid
-            newidx = np.argmax(np.min(initCentroidsDist[:,:(i + 1)], 1))
+            newidx = np.argmax(np.min(initCentroidsDist[:, :(i + 1)], 1))
             initCentroids[i + 1] = R[newidx]
 
         controids, labels = kmeans2(R, initCentroids, iter=10, thresh=1e-05, minit='matrix', missing='warn')
 
-        assert(len(trajectories) == len(labels))
+        return labels
 
-        for trajLab in zip(trajectories, labels):
-            trajLab[0].setClusterIdx(trajLab[1])
+        # assert (len(trajectories) == len(labels))
+        #
+        # for trajLab in zip(trajectories, labels):
+        #     trajLab[0].setClusterIdx(trajLab[1])
+
+    @staticmethod
+    def change_to_traj(trajectories):
+        out = []
+
+        for i in range(len(trajectories)):
+            temp = Trajectory()
+
+            for j in trajectories[i]:
+                temp.addPoint(j)
+
+            out.append(temp)
+
+        return out
 
 
 # Testing the module
 if __name__ == "__main__":
-#    trajs = Trajectory()
+    # trajs = Trajectory()
     trajs = [[(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (3.0, 3.0)],
              [(0.5, 0.5), (1.5, 1.5), (2.5, 2.5), (3.5, 3.5)],
              [(12.0, -5.0), (10.0, -2.5), (8.0, 0.0), (6.0, 2.5)],
              [(14.0, -7.0), (12.0, -4.5), (10.0, -2.0), (8.0, 0.5)]]
 
     clust = Clustering()
-#    res = clust.clusterAgglomerartive(trajs, 2)
+    #    res = clust.clusterAgglomerartive(trajs, 2)
     res = clust.clusterSpectral(trajs, 2)
     print(res)

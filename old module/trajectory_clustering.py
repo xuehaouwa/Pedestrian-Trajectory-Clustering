@@ -5,7 +5,7 @@ Created on 4. 5. 2015
 '''
 
 from tkinter import *
-from trajectory import Trajectory
+from utils.trajectory import Trajectory
 from clustering import Clustering
 import sys
 from PIL import Image, ImageTk

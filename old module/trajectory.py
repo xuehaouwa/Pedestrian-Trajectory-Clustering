@@ -7,6 +7,7 @@ Created on 24. 4. 2015
 from math import *
 from common import *
 
+
 class Trajectory:
     """A class implementing one trajectory"""
 
@@ -52,7 +53,7 @@ class Trajectory:
         xlast, ylast = None, None
         for p in self.points:
             # paint a point
-            widget.create_oval(p[0] - 2, p[1] - 2, p[0] + 2, p[1] + 2, fill = color)
+            widget.create_oval(p[0] - 2, p[1] - 2, p[0] + 2, p[1] + 2, fill=color)
 
             # paint a line
             if xlast is not None and ylast is not None:
@@ -69,7 +70,7 @@ class Trajectory:
         Trajectory.globID = 0
 
     def __str__(self):
-        str  = "=== Trajectory ===\n"
+        str = "=== Trajectory ===\n"
         str += "ground truth: %d\n" % self.gti
         str += "cluster: %d\n" % self.ci
         for p in self.points:
@@ -79,6 +80,7 @@ class Trajectory:
 
     def __len__(self):
         return len(self.points)
+
 
 if __name__ == "__main__":
     # Test prefix sum
@@ -90,9 +92,9 @@ if __name__ == "__main__":
     t1.addPoint((3, 3))
 
     ps = [i * sqrt(2) for i in range(4)]
-    assert(ps == t1.prefixSum)
+    assert (ps == t1.prefixSum)
 
     l = t1.length()
-    assert(l == 3 * sqrt(2))
+    assert (l == 3 * sqrt(2))
 
     print("TEST END")
