@@ -67,21 +67,21 @@ class DataLoader():
         return [a_x, a_y]
 
 
-DL = DataLoader('TownCentre-groundtruth.txt')
-
-data = DL.read_from_txt()
-#print(data)
-print(np.shape(data))
-ped_num = DL.get_pedestrian_num()
-print(ped_num)
-
-all_trajectories = DL.get_trajectories()
-
-
-#print(all_trajectories)
-print(len(all_trajectories))
-
-traj = DL.traj_filter(40)
+# DL = DataLoader('TownCentre-groundtruth.txt')
+#
+# data = DL.read_from_txt()
+# #print(data)
+# print(np.shape(data))
+# ped_num = DL.get_pedestrian_num()
+# print(ped_num)
+#
+# all_trajectories = DL.get_trajectories()
+#
+#
+# #print(all_trajectories)
+# print(len(all_trajectories))
+#
+# traj = DL.traj_filter(40)
 
 
 
