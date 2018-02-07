@@ -43,11 +43,11 @@ town_trajectories = town_data()
 # drawer = DrawTrajectory('town_background.png')
 # drawer.draw_clusterd_trajectories(town_trajectories[0: 184], res, 6)
 
-clustering = Cluster(detect_radius, similarity_threashold, town_trajectories[0: 30])
+clustering = Cluster(detect_radius, similarity_threashold, town_trajectories[0: 184])
 
 clustering.cal_similarity_matrix()
 
 clusters = clustering.clustering_k(6)
 
 drawer = DrawTrajectory('town_background.png')
-drawer.draw_clusterd_trajectories(town_trajectories[0: 30], clusters, 6)
+drawer.draw_clusterd_trajectories(town_trajectories[0: 184], clusters, 6)
