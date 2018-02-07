@@ -1,24 +1,8 @@
 import math
 import numpy as np
+from sklearn.cluster import SpectralClustering, KMeans
 
 
-# def is_closed(p1, p2, detect_radius):
-#     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) < detect_radius
-#
-#
-# def similarity(r1, r2, detect_radius):
-#     count = 0.0
-#
-#     for i in range(len(r1)):
-#         is_closed_flag = False
-#         for j in range(len(r2)):
-#             if is_closed(r1[i], r2[j], detect_radius):
-#                 is_closed_flag = True
-#
-#         if is_closed_flag:
-#             count += 1.0
-#
-#     return count / len(r1)
 
 
 class Cluster():
@@ -70,3 +54,14 @@ class Cluster():
                         clusters[y] = clusters[x] = i
                         i = i + 1
         return clusters
+
+    def clustering_k(self, num_clusters):
+
+        # eigen_values, eigen_vectors = np.linalg.eigh(self.similarity_matrix)
+        #
+        # clusters = KMeans(n_clusters=num_clusters, init='k-means++').fit_predict()
+
+        clusters = SpectralClustering(n_clusters=num_clusters).fit(self.similarity_matrix)
+
+        return clusters.labels_
+
