@@ -10,12 +10,14 @@ from data.process_data import DataLoader
 import numpy as np
 from utils.drawing import DrawTrajectory
 import time
+from clustering.dtw_distance import DtwCluster
 
 
 def file2matrix(filename):
     data = np.loadtxt(filename, dtype=int)
     data = np.reshape(data, [-1, 3])
     return data
+
 
 def get_coord_from_txt(filename, ped_ID):
     data = file2matrix(filename)
@@ -25,30 +27,32 @@ def get_coord_from_txt(filename, ped_ID):
     coord = np.reshape(coord, [-1, 2])
     return coord
 
+
 def select_trajectory(data, frame_num):
     if len(data) >= frame_num:
         return True
     else:
         return False
 
+
 def get_all_trajectory(total_pedestrian_num):
-    
     data = []
-    
+
     for i in range(total_pedestrian_num):
-        filename = './Annotation/' + str(i+1).zfill(6) + '.txt'
-        ped_ID = i+1
+        filename = './Annotation/' + str(i + 1).zfill(6) + '.txt'
+        ped_ID = i + 1
         data.append(get_coord_from_txt(filename, ped_ID))
-        
+
     return data
+
 
 def traj_length(data, length):
     out = []
-    
+
     for i in range(len(data)):
         if select_trajectory(data[i], length):
             out.append(data[i])
-            
+
     return out
 
 
@@ -58,12 +62,13 @@ data = traj_length(data_NYGC, 40)
 cluster = Clustering()
 
 start_time = time.time()
-res = cluster.clusterSpectral(data[0: 18], 6)
+clustering = DtwCluster(data[0: 18])
 
+clustering.cal_dis_matrix()
 
-print(time.time()-start_time)
+clusters = clustering.clustering_k(6)
 
-print(res)
+print(time.time() - start_time)
 
 drawer = DrawTrajectory('000000.jpg')
-drawer.draw_clusterd_trajectories(data[0: 18], res, 6)
+drawer.draw_clusterd_trajectories(data[0: 18], clusters, 6)
