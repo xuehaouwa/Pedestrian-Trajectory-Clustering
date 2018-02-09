@@ -8,6 +8,7 @@ from clustering.clustering import Clustering
 from data.process_data import DataLoader
 import numpy as np
 from utils.drawing import DrawTrajectory
+from clustering.dtw_distance import DtwCluster
 import time
 from clustering.similarity import Cluster
 
@@ -43,9 +44,21 @@ town_trajectories = town_data()
 # drawer = DrawTrajectory('town_background.png')
 # drawer.draw_clusterd_trajectories(town_trajectories[0: 184], res, 6)
 
-clustering = Cluster(detect_radius, similarity_threashold, town_trajectories[0: 184])
 
-clustering.cal_similarity_matrix()
+# similarity method
+
+# clustering = Cluster(detect_radius, similarity_threashold, town_trajectories[0: 184])
+#
+# clustering.cal_similarity_matrix()
+#
+# clusters = clustering.clustering_k(6)
+
+
+# dtw distance method
+
+clustering = DtwCluster(town_trajectories[0: 184])
+
+clustering.cal_dis_matrix()
 
 clusters = clustering.clustering_k(6)
 
