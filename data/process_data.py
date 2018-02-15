@@ -48,15 +48,32 @@ class DataLoader():
             self.all_trajectories.append(temp_traj)
 
         return self.all_trajectories
-    
+
     def traj_filter(self, length_threshold):
-        
+
         for i in range(len(self.all_trajectories)):
             if len(self.all_trajectories[i]) >= length_threshold:
                 self.trajectories.append(self.all_trajectories[i])
-                
+
         return self.trajectories
-    
+
+    @staticmethod
+    def trajectory_encoder(trajectory):
+        """
+
+        :param trajectory: a trajectory in list, [[x1, y1], [x2, y2]...]
+        :return: encoded trajectory vector
+        """
+        encoded = []
+
+        for point in range(len(trajectory) - 1):
+            encoded.append(trajectory[-1] - trajectory[point])
+
+        # last point in trajectory
+        encoded.append(trajectory[-1])
+
+        return encoded
+
     @staticmethod
     def center_of_bounding_box(left, top, right, bottom):
         center_x = (left + right) / 2
@@ -65,7 +82,6 @@ class DataLoader():
         a_y = round(center_y, 4)
 
         return [a_x, a_y]
-
 
 # DL = DataLoader('TownCentre-groundtruth.txt')
 #
@@ -82,6 +98,3 @@ class DataLoader():
 # print(len(all_trajectories))
 #
 # traj = DL.traj_filter(40)
-
-
-

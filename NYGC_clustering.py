@@ -62,7 +62,7 @@ data = traj_length(data_NYGC, 40)
 cluster = Clustering()
 
 start_time = time.time()
-clustering = DtwCluster(data[0: 18])
+clustering = DtwCluster(data[0: 3800])
 
 clustering.cal_dis_matrix()
 
@@ -71,4 +71,4 @@ clusters = clustering.clustering_k(6)
 print(time.time() - start_time)
 
 drawer = DrawTrajectory('000000.jpg')
-drawer.draw_clusterd_trajectories(data[0: 18], clusters, 6)
+drawer.draw_clusterd_trajectories(data[0: 3800], clusters, 6)
