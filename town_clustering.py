@@ -11,6 +11,7 @@ from utils.drawing import DrawTrajectory
 from clustering.dtw_distance import DtwCluster
 import time
 from clustering.similarity import Cluster
+from clustering.editdistance_clustering import Cluster
 
 detect_radius = 100
 similarity_threashold = 0.5
@@ -56,7 +57,16 @@ town_trajectories = town_data()
 
 # dtw distance method
 
-clustering = DtwCluster(town_trajectories[0: 184])
+#clustering = DtwCluster(town_trajectories[0: 184])
+#
+#clustering.cal_dis_matrix()
+#
+#clusters = clustering.clustering_k(6)
+#
+#drawer = DrawTrajectory('town_background.png')
+#drawer.draw_clusterd_trajectories(town_trajectories[0: 184], clusters, 6)
+
+clustering = Cluster(town_trajectories[0: 184])
 
 clustering.cal_dis_matrix()
 
