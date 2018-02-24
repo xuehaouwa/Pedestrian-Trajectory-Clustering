@@ -6,3 +6,5 @@ Annotation/
 *.jpg
 
 *.pyc
+
+*.npy
